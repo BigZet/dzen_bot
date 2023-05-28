@@ -21,9 +21,6 @@ DEFAULT_CONFIG = {
 }
 
 
-
-
-
 def make_browser_config(config):
     logger = logging.getLogger(__name__)
     for key in set(list(DEFAULT_CONFIG.keys()) + list(config.keys())):

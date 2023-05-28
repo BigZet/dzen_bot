@@ -4,9 +4,10 @@ import argparse
 import yaml
 import time
 
+from bot import drivers
+from bot import utils
+from bot import page_manager
 
-import bin.utils
-import bin.driver
 
 
 def main():
@@ -30,33 +31,20 @@ def main():
     
     logger.debug("Loaded driver config: " + str(driver_config))
 
-    driver_config = bin.utils.make_browser_config(driver_config)
+    driver_config = utils.make_browser_config(driver_config)
 
     logger.debug("Succesfully parsed driver config: " + str(driver_config))
 
     if driver_config.get("engine") == "chrome":
-        driver =  bin.driver.ChromeDriver(driver_config)
+        driver =  drivers.ChromeDriver(driver_config)
 
-    time.sleep(15)
-    driver.restart_driver()
+    pm = page_manager.PageManager(driver, driver_config.get('pages_path'))
+    pm.test()
+    for i in ["https://www.google.com/", "https://yandex.com/", "https://www.bing.com/", "https://www.yahoo.com/"]:
+        pm.go(i)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    driver.quit()
+    logger.debug("Closing driver")
     logging.shutdown()
 
 if __name__ == '__main__':
